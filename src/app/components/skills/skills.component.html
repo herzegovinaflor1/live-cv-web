@@ -1,0 +1,15 @@
+<section class="section padd-box">
+    <h2 class="title-lg text-upper padd-box">Skills</h2>
+    <mat-form-field class="example-chip-list" appearance="fill">
+        <mat-chip-list #chipList multiple [formControl]="formControl">
+            <mat-chip *ngFor="let skill of skills; let i = index" [selected]="skill" [value]="skill.name" (removed)="removeSkill(skill, i)">
+                {{skill.name}}
+            </mat-chip>
+            <ng-template [ngIf]="isEnabled()">
+                <input placeholder="Add skills" [matChipInputFor]="chipList" (matChipInputTokenEnd)="addSkill($event)">
+            </ng-template>
+        </mat-chip-list>
+    </mat-form-field>
+
+    <input class="btn btn-primary btn-lg" type="submit" value="Post Your Comment" (click)="saveSkills()" *ngIf="isSave()">
+</section>

@@ -1,0 +1,29 @@
+<section class="section brd-btm padd-box">
+    <div class="row">
+        <div class="col-sm-12">
+            <h2 class="title-lg text-upper">About Me</h2>
+            <app-live-edit-textarea value={{summary}} (onSave)="updateSummary($event)"></app-live-edit-textarea>
+        </div>
+    </div>
+    <div class="row" *ngIf="isEnabled()">
+        <div class="col-sm-9">
+            <div class="crt-share-box clearfix">
+                <button *ngIf="link == null;else generateShareLinkasd" id="btn-share" class="btn btn-share btn-upper" (click)="generateShareLink()">
+                    <span class="crt-icon crt-icon-share-alt"></span>Generate Share Link
+                </button>
+
+                <ng-template #generateShareLinkasd>
+                    <div>
+                        <button id="btn-share" class="btn btn-share btn-upper left" (click)="copyShareLink()">
+                            <span class="crt-icon crt-icon-share-alt"></span>Copy Link
+                        </button>
+                        <button id="btn-share" class="btn btn-share btn-upper right" (click)="deleteShareLink()">
+                            <span class="crt-icon crt-icon-share-alt"></span>Remove Link
+                        </button>
+                    </div>
+                </ng-template>
+            </div>
+
+        </div>
+    </div>
+</section>

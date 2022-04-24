@@ -1,0 +1,8 @@
+.highlight {
+    color: lightgrey;
+}
+
+.block {
+    display: flex;
+    justify-content: space-between;
+}

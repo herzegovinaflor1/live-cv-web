@@ -1,0 +1,21 @@
+<div class="col-sm-6 clear-mrg">
+    <h2 class="title-thin text-muted">personal information</h2>
+    <dl class="dl-horizontal clear-mrg">
+        <dt class="text-upper">Full Name</dt>
+        <dd>
+            <app-live-edit-input value={{fullName}} (onSave)="updateFullName($event)"></app-live-edit-input>
+        </dd>
+        <dt class="text-upper">Location</dt>
+        <dd>
+            <app-live-edit-input value={{location}} (onSave)="updateLocation($event)"></app-live-edit-input>
+        </dd>
+        <dt class="text-upper">e-mail</dt>
+        <dd>
+            <app-live-edit-input value={{email}} (onSave)="updateEmail($event)"></app-live-edit-input>
+        </dd>
+        <!-- <dt class="text-upper">phone</dt>
+        <dd>
+            <app-live-edit-input value={{phone}} (onSave)="updatePhone($event)"></app-live-edit-input>
+        </dd> -->
+    </dl>
+</div>

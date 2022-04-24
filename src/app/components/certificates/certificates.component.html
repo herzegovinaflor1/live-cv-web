@@ -1,0 +1,50 @@
+<section class="section padd-box">
+    <h2 class="title-lg text-upper">Licenses & Certificates</h2>
+    <div class="padd-box-sm clear-mrg">
+        <div class="ref-box brd-btm hreview" *ngFor="let certificate of certificates; let i = index">
+            <div class="ref-info" style="display: flex; justify-content: space-between;">
+                <div class="ref-author">
+                    <strong>{{certificate.title}}</strong>
+                    <span>{{certificate.issuedBy}}</span>
+                </div>
+                <div>
+                    <ng-template [ngIf]="isEnabled()">
+                        <strong hover-class="highlight" class="progress-title" (click)="removeExistingExperience(i)">Remove</strong>
+                    </ng-template>
+                </div>
+            </div>
+        </div>
+        <div class="ref-box brd-btm hreview" *ngFor="let certificate of add; let i = index">
+            <div class="ref-info">
+                <div class="ref-author">
+                    <app-live-edit-input placeholder="Certification title" value={{certificate.title}} (onSave)="addTitle($event, i)"></app-live-edit-input>
+                    <app-live-edit-input placeholder="Issued by" value={{certificate.issuedBy}} (onSave)="addIssuedBy($event, i)"></app-live-edit-input>
+                    <mat-form-field appearance="fill">
+                        <mat-label>Enter a date range</mat-label>
+                        <mat-date-range-input [formGroup]="certificate.range" [rangePicker]="picker">
+                            <input matStartDate style="width: 300px" formControlName="start" placeholder="Start date">
+                            <input matEndDate formControlName="end" placeholder="End date">
+                        </mat-date-range-input>
+                        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                        <mat-date-range-picker #picker></mat-date-range-picker>
+                    </mat-form-field>
+                </div>
+            </div>
+        </div>
+        <p *ngIf="!certificates.length && !add.length">
+            No certifications are added
+        </p>
+    </div>
+    <ng-template [ngIf]="isEnabled()">
+        <input class="btn btn-primary btn-sm" type="submit" value="Add Certificate" (click)="addNewCertificate()" style="display: table;margin-left: auto;margin-right: auto;">
+        <div style="display: inline-flex;">
+            <!-- remove *ngIf -->
+            <div *ngIf="add.length ||  update.length || delete.length" (click)="decline()" class="form-submit form-item-wrap" (click)="decline()">
+                <input class="btn btn-primary btn-lg" type="submit" value="Cancel">
+            </div>
+            <div class="form-submit form-item-wrap">
+                <input class="btn btn-primary btn-lg" type="submit" value="Save" *ngIf="isSave()" (click)="saveNewCertificates()">
+            </div>
+        </div>
+    </ng-template>
+</section>

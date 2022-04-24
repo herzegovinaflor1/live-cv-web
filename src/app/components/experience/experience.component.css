@@ -1,0 +1,12 @@
+::ng-deep .mat-date-range-input-container {
+    width: 300px;
+}
+
+::ng-deep .mat-date-range-input-container .mat-date-range-input-start-wrapper {
+    width: 100px;
+    height: 40px;
+}
+
+.highlight {
+    color: lightgrey;
+}

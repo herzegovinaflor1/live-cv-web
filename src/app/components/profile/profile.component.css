@@ -1,0 +1,8 @@
+.left {
+    border-radius: 35px 0 0 35px;
+    margin: 0;
+}
+
+.right {
+    border-radius: 0 35px 35px 0;
+}
