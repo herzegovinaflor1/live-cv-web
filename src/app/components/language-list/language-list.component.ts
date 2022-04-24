@@ -31,7 +31,7 @@ export class LanguageListComponent implements OnInit {
 
   changeLanguageLevelOfSaved(newLevel: string, index: number) {
     const userLanguageToModify: Language = this.languages[index];
-    if (this.languageLevelIsDifferent(userLanguageToModify, newLevel)) {
+    if (this.languageLevelIsDifferent(userLanguageToModify, newLevel) && this.isEnabled()) {
       this.makeUserLanguageCopy();
 
       userLanguageToModify.level = newLevel;
@@ -69,8 +69,9 @@ export class LanguageListComponent implements OnInit {
         next: (res) => {
           this.newLanguages = [];
           this.languagesToUpdate = [];
-          this.languagesToUpdate = [];
+          this.languagesToRemove = [];
           this.languages = res;
+          this.languagesCopy = [];
         },
         error: (e) => {
           console.log(e);

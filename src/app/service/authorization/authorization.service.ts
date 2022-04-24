@@ -19,16 +19,12 @@ export class AuthorizationService {
 
 
   refreshToken() {
-    this.httpClient
-      .get(`${environment.host}/token/refresh`)
-      .subscribe((res: any) => {
-        const accessToken = res.headers.get('access_token');
-        const refreshToken = res.headers.get('refresh_token');
-        const userId = res.headers.get('user_id');
-        this.cookieService.set('access_token', accessToken);
-        this.cookieService.set('refresh_token', refreshToken);
-        this.router.navigate([`/cv/${userId}`])
-      })
+    const options = {
+      headers: new HttpHeaders()
+        .append('Authorization', `Bearer ${this.getRefreshToken()}`),
+    };
+
+    return this.httpClient.get(`${environment.host}/token/refresh`, options);
   }
 
   authenticate(username: any, password: any) {
@@ -55,6 +51,11 @@ export class AuthorizationService {
         this.cookieService.set('refresh_token', refreshToken);
         this.router.navigate([`/cv/${userId}`])
       })
+  }
+
+  singOut() {
+    this.cookieService.delete('access_token');
+    this.cookieService.delete('refresh_token');
   }
 
   isUserLoggedIn(): boolean {

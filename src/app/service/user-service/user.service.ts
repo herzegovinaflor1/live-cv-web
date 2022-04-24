@@ -5,6 +5,8 @@ import { ShareLink, ShareLinkCommand, SummaryDataChangeRequest, User, UserField 
 import { environment } from 'src/environments/environment';
 import { AuthorizationService } from '../authorization/authorization.service';
 
+const EMAIL_REGEX: RegExp = new RegExp("/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/"); 
+
 @Injectable({
   providedIn: 'root'
 })
@@ -77,6 +79,10 @@ export class UserService {
       );
     }
     return of({})
+  }
+
+  isEmailValid(email: string): boolean {
+    return EMAIL_REGEX.test(email);
   }
 
   private isDataHasBeenChanged(changeRequest: SummaryDataChangeRequest) {

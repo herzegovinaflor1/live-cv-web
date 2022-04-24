@@ -10,13 +10,13 @@ import { UserService } from '../../service/user-service/user.service';
 export class PersonalInfoComponent implements OnInit {
 
   @Input()
-  fullName: any;
+  fullName: string = "";
   @Input()
-  location: any;
+  location: string = "";
   @Input()
-  email: any;
+  email: string = "";
   @Input()
-  phone: any;
+  phone: string = "";
   @Input()
   isShareMode: boolean = false;
 
@@ -27,7 +27,7 @@ export class PersonalInfoComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  updateFullName(newFullName: any) {
+  updateFullName(newFullName: string) {
     const changeRequest: SummaryDataChangeRequest = {
       newValue: newFullName,
       oldValue: this.fullName,
@@ -38,7 +38,7 @@ export class PersonalInfoComponent implements OnInit {
       .subscribe();
   }
 
-  updateLocation(newLocation: any) {
+  updateLocation(newLocation: string) {
     const changeRequest: SummaryDataChangeRequest = {
       newValue: newLocation,
       oldValue: this.location,
@@ -49,7 +49,7 @@ export class PersonalInfoComponent implements OnInit {
       .subscribe();
   }
 
-  updateEmail(newEmail: any) {
+  updateEmail(newEmail: string) {
     const changeRequest: SummaryDataChangeRequest = {
       newValue: newEmail,
       oldValue: this.email,
@@ -60,7 +60,7 @@ export class PersonalInfoComponent implements OnInit {
       .subscribe();
   }
 
-  updatePhone(newPhone: any) {
+  updatePhone(newPhone: string) {
     const changeRequest: SummaryDataChangeRequest = {
       newValue: newPhone,
       oldValue: this.phone,
@@ -69,6 +69,13 @@ export class PersonalInfoComponent implements OnInit {
     this.phone = newPhone;
     this.userService.updateUserDataByField(changeRequest)
       .subscribe();
+  }
+
+  isValidEmailValid(email: string): boolean {
+    if (email.length === 0) {
+      return true;
+    }
+    return this.userService.isEmailValid(email);
   }
 
 }

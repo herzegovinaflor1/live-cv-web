@@ -18,7 +18,7 @@
         <div *ngIf="!isShareMode || email">
             <dt class="text-upper">e-mail</dt>
             <dd>
-                <app-live-edit-input placeholder="Your e-mail..." value={{email}} (onSave)="updateEmail($event)">
+                <app-live-edit-input [isValid]="isValidEmailValid" placeholder="Your e-mail..." value={{email}} (onSave)="updateEmail($event)">
                 </app-live-edit-input>
             </dd>
         </div>

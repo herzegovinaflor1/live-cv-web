@@ -8,14 +8,18 @@ import { AuthorizationService } from 'src/app/service/authorization/authorizatio
 })
 export class LiveEditInputComponent implements OnInit {
 
-  isEdit = false;
   @Input()
-  value: any;
+  value: string = "";
   @Input()
-  placeholder: any;
+  placeholder: string = "";
+  @Input()
+  isValid: (value: string) => boolean = () => true;
+
   @Output()
   onSave: EventEmitter<any> = new EventEmitter()
-  newValue: any;
+  
+  newValue: string = "";
+  isEdit:boolean = false;
 
   constructor(
     private eRef: ElementRef,
@@ -34,7 +38,7 @@ export class LiveEditInputComponent implements OnInit {
     this.newValue = model;
   }
 
-  decline(asd: any): void {
+  decline(): void {
     this.isEdit = false;
   }
 
@@ -43,7 +47,7 @@ export class LiveEditInputComponent implements OnInit {
     if (this.eRef.nativeElement.contains(event.target)) {
       this.isEdit = true;
     } else {
-      if (this.isEdit) {
+      if (this.isEdit && this.isValid(this.newValue)) {
         this.save();
         this.isEdit = false;
       }

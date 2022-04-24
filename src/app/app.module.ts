@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { CookieService } from 'ngx-cookie-service';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -32,6 +32,7 @@ import { LiveEditTextareaComponent } from './modules/live-edit-textarea/live-edi
 import { SecurityRestrictedComponent } from './modules/security-restricted/security-restricted.component';
 import { ClipboardModule } from '@angular/cdk/clipboard';
 import { ShareProfileComponent } from './pages/share-profile/share-profile.component';
+import { AuthorizationInterceptor } from './interceptors/http-interceptor';
 
 @NgModule({
   declarations: [
@@ -72,7 +73,8 @@ import { ShareProfileComponent } from './pages/share-profile/share-profile.compo
     UserService,
     MatDatepickerModule,
     CookieService,
-    ClipboardModule
+    ClipboardModule,
+    {provide: HTTP_INTERCEPTORS, useClass: AuthorizationInterceptor, multi: true}
   ],
   bootstrap: [AppComponent]
 })
