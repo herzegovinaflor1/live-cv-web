@@ -44,7 +44,7 @@ export class AvatarComponent implements OnInit {
       });
   }
 
-  updateCurrentTitle(newTitle: any) {
+  updateCurrentTitle(newTitle: string) {
     const changeRequest: SummaryDataChangeRequest = {
       newValue: newTitle,
       oldValue: this.currentTitle,

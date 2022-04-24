@@ -23,7 +23,9 @@ export class ShareProfileComponent implements OnInit {
     const token = this.route.snapshot.queryParamMap.get('token');
     if (token) {
       this.userService.getUserByToken(token)
-        .subscribe(res => this.response = res);
+        .subscribe(res => {
+          this.response = res;
+        });
     }
   }
 

@@ -8,7 +8,7 @@
 
                     <section class="section padd-box">
                         <div class="row">
-                            <app-personal-info [fullName]="response.fullName" [location]="response.currentLocation" [email]="response.email" [phone]="response.phone"></app-personal-info>
+                            <app-personal-info [isShareMode]="true" [fullName]="response.fullName" [location]="response.currentLocation" [email]="response.email" [phone]="response.phone"></app-personal-info>
                             <app-language-list [languages]="response.languages"></app-language-list>
                         </div>
                     </section>

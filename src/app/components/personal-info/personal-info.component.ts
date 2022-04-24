@@ -17,6 +17,8 @@ export class PersonalInfoComponent implements OnInit {
   email: any;
   @Input()
   phone: any;
+  @Input()
+  isShareMode: boolean = false;
 
   constructor(
     private userService: UserService

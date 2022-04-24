@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, of, tap } from 'rxjs';
-import { ShareLink, ShareLinkCommand, SummaryDataChangeRequest, UserField } from 'src/app/types/types';
+import { ShareLink, ShareLinkCommand, SummaryDataChangeRequest, User, UserField } from 'src/app/types/types';
 import { environment } from 'src/environments/environment';
 import { AuthorizationService } from '../authorization/authorization.service';
 
@@ -10,7 +10,7 @@ import { AuthorizationService } from '../authorization/authorization.service';
 })
 export class UserService {
 
-  private userId: any = null;
+  private userId: string | null = null;
 
   constructor(
     private httpClient: HttpClient,
@@ -21,19 +21,24 @@ export class UserService {
     return this.userId;
   }
 
-  getUser(userId: any): Observable<any> {
+  getUser(userId: string): Observable<User> {
     return this.httpClient
-      .get(`${environment.host}/user/${userId}`)
+      .get<User>(`${environment.host}/user/${userId}`)
       .pipe(
-        tap((data: any) => {
-          console.log(this.userId = data.id)
-        }),
+        tap((data: User) => {
+          this.assignUserId(data.id);
+        })
       )
   }
 
-  getUserByToken(token: string): Observable<any> {
+  getUserByToken(token: string): Observable<User> {
     return this.httpClient
-      .get(`${environment.host}/user/share-link/${token}`)
+      .get<User>(`${environment.host}/user/share-link/${token}`)
+      .pipe(
+        tap((data: User) => {
+          this.assignUserId(data.id);
+        })
+      )
   }
 
   generateShareLink(command: ShareLinkCommand): Observable<ShareLink> {
@@ -54,7 +59,6 @@ export class UserService {
   }
 
   updateUserDataByField(changeRequest: SummaryDataChangeRequest): Observable<any> {
-    console.log('asdqwe');
     if (this.isDataHasBeenChanged(changeRequest)) {
       const options = {
         headers: new HttpHeaders()
@@ -77,6 +81,10 @@ export class UserService {
 
   private isDataHasBeenChanged(changeRequest: SummaryDataChangeRequest) {
     return changeRequest.newValue !== changeRequest.oldValue;
+  }
+
+  private assignUserId(userId: string) {
+    this.userId = userId;
   }
 
 }

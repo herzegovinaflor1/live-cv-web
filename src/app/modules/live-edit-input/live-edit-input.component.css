@@ -1,3 +1,7 @@
 .hover:hover {
     opacity: 0.5;
 }
+
+.emptyField {
+    font-style: italic;
+}

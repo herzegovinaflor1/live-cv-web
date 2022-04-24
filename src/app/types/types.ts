@@ -47,13 +47,33 @@ export type Education = {
 }
 
 export type SummaryDataChangeRequest = {
-    newValue: string, 
-    oldValue: string, 
+    newValue: string,
+    oldValue: string,
     userFiled: UserField
 }
 
 export type ShareLink = {
     value: string
+}
+
+export type Contact = {
+    value: string
+}
+
+export type User = {
+    id: string,
+    fullName: string,
+    summary: string,
+    currentTitle: string,
+    currentLocation: string,
+    email: string,
+    phone: string,
+    experience: Experience[]
+    education: Education[],
+    certificates: Certificate[]
+    contacts: Contact[]
+    languages: Language[]
+    skills: Skill[]
 }
 
 export type UserField = "SUMMARY" | "PHOTO" | "CURRENT_TITLE" | "LOCATION" | "EMAIL" | "PHONE" | "FULL_NAME";
