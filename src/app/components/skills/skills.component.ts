@@ -14,11 +14,13 @@ import { v4 as uuidv4 } from 'uuid';
 export class SkillsComponent implements OnInit {
 
   @Input()
-  skills: any = [];
+  skills: Skill[] = [];
+
+  skillsCopy: Skill[] = [];
   formControl = new FormControl(['angular']);
 
-  addSkills: Skill[] = [];
-  removeSkills: Skill[] = [];
+  add: Skill[] = [];
+  delete: Skill[] = [];
 
   constructor(
     private authorizationService: AuthorizationService,
@@ -29,12 +31,13 @@ export class SkillsComponent implements OnInit {
   }
 
   addSkill(event: MatChipInputEvent) {
+    this.makeUserSkillsCopy();
     if (event.value) {
       this.skills.push({
         name: event.value,
         id: uuidv4()
       });
-      this.addSkills.push(
+      this.add.push(
         {
           name: event.value,
           id: uuidv4()
@@ -44,38 +47,58 @@ export class SkillsComponent implements OnInit {
     }
   }
 
-  removeSkill(skill: any, index: any) {
+  removeSkill(skill: Skill, index: number) {
+    this.makeUserSkillsCopy();
     this.skills.splice(index, 1);
-    const newSkillsIdx = this.addSkills.findIndex((t: any) => t.id = skill.id);
+    const newSkillsIdx = this.add.findIndex((t: any) => t.id = skill.id);
     if (newSkillsIdx > -1) {
-      this.addSkills.splice(newSkillsIdx, 1);
+      this.add.splice(newSkillsIdx, 1);
     } else {
-      this.removeSkills.push({
+      this.delete.push({
         id: skill.id
       });
     }
   }
 
   isSave() {
-    return this.removeSkills.length || this.addSkills.length;
+    return this.delete.length || this.add.length;
   }
 
   saveSkills() {
     const modificationrequest: ModificationRequest<Skill> = {
-      add: this.addSkills,
+      add: this.add,
       update: [],
-      delete: this.removeSkills
+      delete: this.delete
     }
 
     this.skillService.updateSkills(modificationrequest)
-      .subscribe(res => {
+      .subscribe((res: Skill[]) => {
         this.skills = res;
       });
-    this.removeSkills = [];
-    this.addSkills = [];
+    this.delete = [];
+    this.add = [];
   }
 
   isEnabled() {
     return this.authorizationService.isUserLoggedIn();
+  }
+
+  cancel() {
+    if (this.skillsCopy.length) {
+      this.skills = this.copySkills(this.skillsCopy);
+    }
+    this.add = [];
+    this.delete = [];
+    this.skillsCopy = [];
+  }
+
+  private copySkills(skills: Skill[]): Skill[] {
+    return skills.map(s => { return { ...s } });
+  }
+
+  private makeUserSkillsCopy() {
+    if (!this.skillsCopy.length) {
+      this.skillsCopy = this.copySkills(this.skills);
+    }
   }
 }

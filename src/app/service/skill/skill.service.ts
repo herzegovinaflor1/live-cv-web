@@ -1,5 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
 import { ModificationRequest, Skill } from 'src/app/types/types';
 import { environment } from 'src/environments/environment';
 import { AuthorizationService } from '../authorization/authorization.service';
@@ -16,12 +17,12 @@ export class SkillService {
     private authorizationService: AuthorizationService,
   ) { }
 
-  updateSkills(skillUpdateRequest: ModificationRequest<Skill>) {
+  updateSkills(skillUpdateRequest: ModificationRequest<Skill>): Observable<Skill[]> {
     const options = {
       headers: new HttpHeaders()
         .append('Authorization', `Bearer ${this.authorizationService.getAccessToken()}`),
     };
-    return this.httpClient.post(
+    return this.httpClient.post<Skill[]>(
       `${environment.host}/skills/update`,
       {
         accountId: this.userService.getCurrentUserId(),
