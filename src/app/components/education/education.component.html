@@ -2,22 +2,29 @@
     <h2 class="title-lg text-upper">Education</h2>
     <div class="education">
         <div class="education-box" *ngFor="let education of educations; let i = index">
-            <time class="education-date" datetime="2014-01T2016-03">
-                {{education.from | date: 'MMM, y'}} - {{education.to | date: 'MMM, y'}}
-            </time>
+            <div class="education-date" style="display: flex;">
+                <div class="date-block" contenteditable (input)="updateStartDate($event, i)">{{education.from}}</div>
+                <div>
+                    &nbsp;-&nbsp;
+                </div>
+                <div class="date-block" contenteditable (input)="updateEndDate($event, i)">{{education.to}}</div>
+            </div>
             <div style="display: flex; justify-content: space-between;">
                 <h3>
-                    <app-live-edit-input value={{education.university}} (onSave)="updateUniversity($event, i)"></app-live-edit-input>
+                    <app-live-edit-input value={{education.university}} (onSave)="updateUniversity($event, i)">
+                    </app-live-edit-input>
                 </h3>
                 <ng-template [ngIf]="isEnabled()">
                     <strong hover-class="highlight" class="progress-title" (click)="removeExistingExperience(i)">Remove</strong>
                 </ng-template>
             </div>
             <span class="education-company">
-                <app-live-edit-input value={{education.degree}} (onSave)="updateDegree($event, i)"></app-live-edit-input>
+                <app-live-edit-input value={{education.degree}} (onSave)="updateDegree($event, i)">
+                </app-live-edit-input>
             </span>
             <p>
-                <app-live-edit-textarea value={{education.specialization}} (onSave)="updateSpecialization($event, i)"></app-live-edit-textarea>
+                <app-live-edit-textarea value={{education.specialization}} (onSave)="updateSpecialization($event, i)">
+                </app-live-edit-textarea>
             </p>
         </div>
         <p *ngIf="!educations.length && !newEducations.length">
@@ -26,20 +33,19 @@
     </div>
     <div class="education">
         <div class="education-box" *ngFor="let education of newEducations; let i = index ">
-            <mat-form-field appearance="fill">
-                <mat-label>Enter a date range</mat-label>
-                <mat-date-range-input [formGroup]="education.range" [rangePicker]="picker">
-                    <input matStartDate style="width: 300px" formControlName="start" placeholder="Start date">
-                    <input matEndDate formControlName="end" placeholder="End date">
-                </mat-date-range-input>
-                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                <mat-date-range-picker #picker></mat-date-range-picker>
-            </mat-form-field>
+            <div class="education-date" style="display: flex;">
+                <div class="date-block" contenteditable (input)="addStartDate($event, i)">{{education.from}}</div>
+                <div>
+                    &nbsp;-&nbsp;
+                </div>
+                <div class="date-block" contenteditable (input)="addEndDate($event, i)">{{education.to}}</div>
+            </div>
             <h3>
                 <app-live-edit-input placeholder="university" value={{education.university}} (onSave)="addUniversity($event, i)"></app-live-edit-input>
             </h3>
             <span class="education-company">
-                <app-live-edit-input placeholder="Company" value={{education.degree}} (onSave)="addDegree($event, i)"></app-live-edit-input>
+                <app-live-edit-input placeholder="Company" value={{education.degree}} (onSave)="addDegree($event, i)">
+                </app-live-edit-input>
             </span>
             <p>
                 <app-live-edit-textarea placeholder="Description" value={{education.specialization}} (onSave)="addSpecialization($event, i)"></app-live-edit-textarea>

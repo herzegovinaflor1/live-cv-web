@@ -1,5 +1,4 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { FormGroup, FormControl } from '@angular/forms';
 import { AuthorizationService } from 'src/app/service/authorization/authorization.service';
 import { ExperienceService } from 'src/app/service/experience/experience.service';
 import { Experience, ModificationRequest } from 'src/app/types/types';
@@ -40,6 +39,25 @@ export class ExperienceComponent implements OnInit {
   addDescription(description: string, index: number) {
     this.newExperiences[index].description = description;
   }
+
+  addStartDate(newStartDate: Event, index: number) {
+    const target = newStartDate.target as HTMLDivElement;
+    this.proceddEditableField(target);
+    const from = target.innerHTML;
+    if (from) {
+      this.newExperiences[index].from = from;
+    }
+  }
+
+  addEndDate(newDateEvent: Event, index: number) {
+    const target = newDateEvent.target as HTMLDivElement;
+    this.proceddEditableField(target);
+    const to = target.innerHTML;
+    if (to) {
+      this.newExperiences[index].to = to;
+    }
+  }
+
 
   deleteNewExperience(index: number) {
     this.newExperiences.splice(index, 1);
@@ -92,6 +110,40 @@ export class ExperienceComponent implements OnInit {
     }
   }
 
+  updateStartDate(newStartDate: Event, index: number) {
+    const target = newStartDate.target as HTMLDivElement;
+    this.proceddEditableField(target);
+    const from = target.innerHTML;
+
+    const experience: Experience = this.experiences[index];
+    if (from && this.valuesAreDifferent(experience.from, from)) {
+      this.makeUserExperienceCopy();
+      const existingExperience = this.getExperienceFromUpdatedList(index);
+      if (existingExperience) {
+        existingExperience.from = from;
+      } else {
+        this.experiencesToUpdate.push(experience);
+      }
+    }
+  }
+
+  updateEndDate(newEndate: Event, index: number) {
+    const target = newEndate.target as HTMLDivElement;
+    this.proceddEditableField(target);
+    const to = target.innerHTML;
+
+    const experience: Experience = this.experiences[index];
+    if (this.valuesAreDifferent(experience.to, to)) {
+      this.makeUserExperienceCopy();
+      const existingExperience = this.getExperienceFromUpdatedList(index);
+      if (existingExperience) {
+        existingExperience.to = to;
+      } else {
+        this.experiencesToUpdate.push(experience);
+      }
+    }
+  }
+
   // 
 
   deleteExistingExperience(index: number) {
@@ -110,19 +162,8 @@ export class ExperienceComponent implements OnInit {
   }
 
   saveNewCompanies() {
-    const newExperiences = this.newExperiences.reduce((map: any, obj: any) => {
-      const y = {
-        ...obj,
-        from: obj.range.value.start.getTime(),
-        to: obj.range.value.end.getTime()
-      };
-      delete y.range;
-      map.push(y);
-      return map;
-    }, []);
-
     const experienceUpdateRequest: ModificationRequest<Experience> = {
-      add: newExperiences,
+      add: this.newExperiences,
       update: this.experiencesToUpdate,
       delete: this.experiencesToDelete
     }
@@ -144,17 +185,13 @@ export class ExperienceComponent implements OnInit {
   addNewCompany() {
     const newCompany: Experience = {
       id: '',
-      from: '',
-      to: '',
+      from: 'From',
+      to: 'To',
       position: "",
       description: "",
       company: {
         name: ""
-      },
-      range: new FormGroup({
-        start: new FormControl(),
-        end: new FormControl(),
-      }),
+      }
     };
     this.newExperiences.push(newCompany);
   }
@@ -192,6 +229,17 @@ export class ExperienceComponent implements OnInit {
     if (!this.experiencesCopy.length) {
       this.experiencesCopy = this.copyExperiences(this.experiences);
     }
+  }
+
+  private proceddEditableField(target: HTMLDivElement) {
+    const range = document.createRange();
+    const sel: any = window.getSelection();
+    range.selectNodeContents(target);
+    range.collapse(false);
+    sel.removeAllRanges();
+    sel.addRange(range);
+    target.focus();
+    range.detach();
   }
 
 }

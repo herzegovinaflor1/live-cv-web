@@ -2,22 +2,29 @@
     <h2 class="title-lg text-upper">work experience</h2>
     <div class="education">
         <div class="education-box" *ngFor="let experience of experiences; let i = index">
-            <time class="education-date" datetime="2014-01T2016-03">
-                {{experience.from | date: 'MMM, y'}} - {{experience.to | date: 'MMM, y'}}
-            </time>
+            <div class="education-date" style="display: flex;">
+                <div class="date-block" contenteditable (input)="updateStartDate($event, i)">{{experience.from}}</div>
+                <div>
+                    &nbsp;-&nbsp;
+                </div>
+                <div class="date-block" contenteditable (input)="updateEndDate($event, i)">{{experience.to}}</div>
+            </div>
             <div style="display: flex; justify-content: space-between;">
                 <h3>
-                    <app-live-edit-input value={{experience.position}} (onSave)="updatePosition($event, i)"></app-live-edit-input>
+                    <app-live-edit-input value={{experience.position}} (onSave)="updatePosition($event, i)">
+                    </app-live-edit-input>
                 </h3>
                 <ng-template [ngIf]="isEnabled()">
                     <strong class="progress-title" hover-class="highlight" (click)="removeExistingExperience(i)">Remove</strong>
                 </ng-template>
             </div>
             <span class="education-company">
-                <app-live-edit-input value={{experience.company.name}} (onSave)="updateCompanyName($event, i)"></app-live-edit-input>
+                <app-live-edit-input value={{experience.company.name}} (onSave)="updateCompanyName($event, i)">
+                </app-live-edit-input>
             </span>
             <p>
-                <app-live-edit-textarea value={{experience.description}} (onSave)="updateDescription($event, i)"></app-live-edit-textarea>
+                <app-live-edit-textarea value={{experience.description}} (onSave)="updateDescription($event, i)">
+                </app-live-edit-textarea>
             </p>
         </div>
         <p *ngIf="!experiences.length && !newExperiences.length">
@@ -26,20 +33,19 @@
     </div>
     <div class="education">
         <div class="education-box" *ngFor="let experience of newExperiences; let i = index ">
-            <mat-form-field appearance="fill">
-                <mat-label>Enter a date range</mat-label>
-                <mat-date-range-input [formGroup]="experience.range" [rangePicker]="picker">
-                    <input matStartDate style="width: 300px" formControlName="start" placeholder="Start date">
-                    <input matEndDate formControlName="end" placeholder="End date">
-                </mat-date-range-input>
-                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                <mat-date-range-picker #picker></mat-date-range-picker>
-            </mat-form-field>
+            <div class="education-date" style="display: flex;">
+                <div class="date-block" contenteditable (input)="addStartDate($event, i)">{{experience.from}}</div>
+                <div>
+                    &nbsp;-&nbsp;
+                </div>
+                <div class="date-block" contenteditable (input)="addEndDate($event, i)">{{experience.to}}</div>
+            </div>
             <h3>
                 <app-live-edit-input placeholder="Position" value={{experience.position}} (onSave)="addPosition($event, i)"></app-live-edit-input>
             </h3>
             <span class="education-company">
-                <app-live-edit-input placeholder="Company" value={{experience.company.name}} (onSave)="addCompanyName($event, i)"></app-live-edit-input>
+                <app-live-edit-input placeholder="Company" value={{experience.company.name}}
+                    (onSave)="addCompanyName($event, i)"></app-live-edit-input>
             </span>
             <p>
                 <app-live-edit-textarea placeholder="Description" value={{experience.description}} (onSave)="addDescription($event, i)"></app-live-edit-textarea>

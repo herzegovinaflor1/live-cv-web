@@ -46,6 +46,24 @@ export class EducationComponent implements OnInit {
     this.newEducations.splice(index, 1);
   }
 
+  addStartDate(newStartDate: Event, index: number) {
+    const target = newStartDate.target as HTMLDivElement;
+    this.proceddEditableField(target);
+    const from = target.innerHTML;
+    if (from) {
+      this.newEducations[index].from = from;
+    }
+  }
+
+  addEndDate(newDateEvent: Event, index: number) {
+    const target = newDateEvent.target as HTMLDivElement;
+    this.proceddEditableField(target);
+    const to = target.innerHTML;
+    if (to) {
+      this.newEducations[index].to = to;
+    }
+  }
+
   // update education
 
   updateUniversity(newUniversity: string, index: number) {
@@ -93,9 +111,46 @@ export class EducationComponent implements OnInit {
     }
   }
 
+
+  updateStartDate(newStartDate: Event, index: number) {
+    const target = newStartDate.target as HTMLDivElement;
+    this.proceddEditableField(target);
+    const from = target.innerHTML;
+
+    const experience: Education = this.educations[index];
+    if (from && this.valuesAreDifferent(experience.from, from)) {
+      this.makeUserEducationsCopy();
+      const existingExperience = this.getEducationFromUpdatedList(index);
+      if (existingExperience) {
+        existingExperience.from = from;
+      } else {
+        this.educationsToUpdate.push(experience);
+      }
+    }
+  }
+
+  updateEndDate(newEndate: Event, index: number) {
+    const target = newEndate.target as HTMLDivElement;
+    this.proceddEditableField(target);
+    const to = target.innerHTML;
+
+    const experience: Education = this.educations[index];
+    if (to && this.valuesAreDifferent(experience.to, to)) {
+      this.makeUserEducationsCopy();
+      const existingExperience = this.getEducationFromUpdatedList(index);
+      if (existingExperience) {
+        existingExperience.to = to;
+      } else {
+        this.educationsToUpdate.push(experience);
+      }
+    }
+  }
+
   deleteExistingExperience(index: number) {
     this.newEducations.splice(index, 1);
   }
+
+  // update end
 
   getExistingExperience(index: number) {
     const existingExperience = this.educations[index];
@@ -119,19 +174,8 @@ export class EducationComponent implements OnInit {
   }
 
   saveNewEducations() {
-    const addEducation = this.newEducations.reduce((map: Education[], obj: Education) => {
-      const y = {
-        ...obj,
-        from: obj.range.value.start.getTime(),
-        to: obj.range.value.end.getTime()
-      };
-      delete y.range;
-      map.push(y);
-      return map;
-    }, []);
-
     const educationUpdateRequest: ModificationRequest<Education> = {
-      add: addEducation,
+      add: this.newEducations,
       update: this.educationsToUpdate,
       delete: this.educationsToDelete
     }
@@ -155,13 +199,9 @@ export class EducationComponent implements OnInit {
       university: "",
       degree: "",
       specialization: "",
-      range: new FormGroup({
-        start: new FormControl(),
-        end: new FormControl(),
-      }),
       id: '',
-      from: '',
-      to: ''
+      from: 'from',
+      to: 'to'
     };
     this.newEducations.push(newEducation);
   }
@@ -199,6 +239,17 @@ export class EducationComponent implements OnInit {
     if (!this.educationsCopy.length) {
       this.educationsCopy = this.copyEducations(this.educations);
     }
+  }
+
+  private proceddEditableField(target: HTMLDivElement) {
+    const range = document.createRange();
+    const sel: any = window.getSelection();
+    range.selectNodeContents(target);
+    range.collapse(false);
+    sel.removeAllRanges();
+    sel.addRange(range);
+    target.focus();
+    range.detach();
   }
 
 }

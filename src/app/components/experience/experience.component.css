@@ -10,3 +10,7 @@
 .highlight {
     color: lightgrey;
 }
+
+.date-block:hover {
+    opacity: 0.7;
+}
