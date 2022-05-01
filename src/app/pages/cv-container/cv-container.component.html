@@ -1,15 +1,16 @@
 <div id="crt-container" class="crt-container">
-    <app-avatar [fullName]="response.fullName" [currentTitle]="response.currentTitle" [photo]="response.photo"></app-avatar>
+    <app-avatar [fullName]="response?.fullName || ''" [currentTitle]="response?.currentTitle || ''" [photo]="response?.photo || ''"></app-avatar>
     <div class="crt-container-sm">
         <div id="about" class="crt-paper-layers crt-animate">
             <div class="crt-paper clearfix">
                 <div class="crt-paper-cont paper-padd clear-mrg">
-                    <app-profile [summary]="response.summary" [link]="response.shareLink"></app-profile>
+                    <app-profile [summary]="response?.summary || ''" [link]="response?.shareLink || ''"></app-profile>
 
                     <section class="section padd-box">
                         <div class="row">
-                            <app-personal-info [fullName]="response.fullName" [location]="response.currentLocation" [email]="response.email" [phone]="response.phone"></app-personal-info>
-                            <app-language-list [languages]="response.languages"></app-language-list>
+                            <app-personal-info [fullName]="response?.fullName" [location]="response?.currentLocation || ''" [email]="response?.email || ''" [phone]="response?.phone || ''">
+                            </app-personal-info>
+                            <app-language-list [languages]="response?.languages || ''"></app-language-list>
                         </div>
                     </section>
                 </div>

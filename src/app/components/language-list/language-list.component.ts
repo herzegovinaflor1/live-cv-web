@@ -73,9 +73,7 @@ export class LanguageListComponent implements OnInit {
           this.languages = res;
           this.languagesCopy = [];
         },
-        error: (e) => {
-          console.log(e);
-        }
+        error: () => {}
       })
   }
 

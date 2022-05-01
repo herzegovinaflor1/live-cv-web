@@ -9,7 +9,7 @@ import { UserService } from '../../service/user-service/user.service';
   templateUrl: './avatar.component.html',
   styleUrls: ['./avatar.component.css']
 })
-export class AvatarComponent implements OnInit {
+export class AvatarComponent {
 
   @Input()
   fullName: any;
@@ -18,22 +18,11 @@ export class AvatarComponent implements OnInit {
   @Input()
   photo: any;
 
-  fileName = '';
-
   constructor(
     private userService: UserService,
     private fileProcessorService: FileProcessorService,
     private avatarService: AvatarService
   ) { }
-
-  ngOnInit(): void {
-    this.fileProcessorService.getCurrentUserPhoto()
-      .subscribe((data: any) => {
-        const reader = new FileReader();
-        reader.onload = (e: any) => this.photo = e.target.result;
-        reader.readAsDataURL(new Blob([data]));
-      });
-  }
 
   downloadCv() {
     this.fileProcessorService.downloadCVFile()
@@ -44,7 +33,7 @@ export class AvatarComponent implements OnInit {
       });
   }
 
-  updateCurrentTitle(newTitle: string) {
+  updateCurrentTitle(newTitle: any) {
     const changeRequest: SummaryDataChangeRequest = {
       newValue: newTitle,
       oldValue: this.currentTitle,
@@ -59,7 +48,6 @@ export class AvatarComponent implements OnInit {
     const file: File = event.target.files[0];
 
     if (file) {
-      this.fileName = file.name;
       const formData = new FormData();
 
       formData.append("photo", file);

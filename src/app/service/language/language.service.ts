@@ -23,7 +23,6 @@ export class LanguageService {
         .append('Authorization', `Bearer ${this.authorizationService.getAccessToken()}`),
     };
 
-    console.log('asdqwe');
     return this.httpClient.post(
       `${environment.host}/language/update`,
       {

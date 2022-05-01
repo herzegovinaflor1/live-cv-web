@@ -21,7 +21,6 @@ export type Certificate = {
     to: string,
     title: string,
     issuedBy: string,
-    range?: any
 }
 
 export type Experience = {
@@ -33,7 +32,6 @@ export type Experience = {
     company: Company,
     achievements?: string[],
     responsibilities?: string[],
-    range?: any
 }
 
 export type Education = {
@@ -43,7 +41,6 @@ export type Education = {
     university: string,
     degree: string,
     specialization: string,
-    range?: any
 }
 
 export type SummaryDataChangeRequest = {

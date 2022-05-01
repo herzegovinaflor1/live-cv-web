@@ -16,7 +16,6 @@ export class SecurityRestrictedComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    console.log('asdasd');
   }
 
   isEnabled() {

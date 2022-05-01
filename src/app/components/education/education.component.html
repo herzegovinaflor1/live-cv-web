@@ -27,7 +27,7 @@
                 </app-live-edit-textarea>
             </p>
         </div>
-        <p *ngIf="!educations.length && !newEducations.length">
+        <p *ngIf="!educations?.length || 0 && !newEducations?.length || 0">
             No education are added
         </p>
     </div>

@@ -78,6 +78,8 @@ export class CertificatesComponent implements OnInit {
     this.add.splice(index, 1);
   }
 
+  // end update certificate
+
   getExistingExperience(index: number) {
     const existingExperience = this.certificates[index];
     const id = existingExperience.id;
@@ -100,24 +102,13 @@ export class CertificatesComponent implements OnInit {
   }
 
   saveNewCertificates() {
-    const add = this.add.reduce((map: Certificate[], obj: Certificate) => {
-      const y = {
-        ...obj,
-        from: obj.range.value.start.getTime(),
-        to: obj.range.value.end.getTime()
-      };
-      delete y.range;
-      map.push(y);
-      return map;
-    }, []);
-
     const certificateUpdateRequest: ModificationRequest<Certificate> = {
-      add: add,
+      add: this.add,
       delete: this.delete,
       update: this.update
     }
     this.certificateService.updateCertificates(certificateUpdateRequest)
-      .subscribe((certificates:Certificate[]) => {
+      .subscribe((certificates: Certificate[]) => {
         this.certificates = certificates;
 
         this.add = [];
@@ -134,10 +125,6 @@ export class CertificatesComponent implements OnInit {
     const newCertificate: Certificate = {
       title: "",
       issuedBy: "",
-      range: new FormGroup({
-        start: new FormControl(),
-        end: new FormControl(),
-      }),
       id: '',
       from: '',
       to: ''

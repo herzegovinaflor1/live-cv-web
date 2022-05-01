@@ -7,7 +7,7 @@
                 <div>
                     &nbsp;-&nbsp;
                 </div>
-                <div class="date-block" contenteditable (input)="updateEndDate($event, i)">{{experience.to}}</div>
+                <div class="date-block" contenteditable (input)="updateEndDate($event, i)">{{getToDate(experience.to)}}</div>
             </div>
             <div style="display: flex; justify-content: space-between;">
                 <h3>
@@ -27,7 +27,7 @@
                 </app-live-edit-textarea>
             </p>
         </div>
-        <p *ngIf="!experiences.length && !newExperiences.length">
+        <p *ngIf="!experiences?.length || 0 && !newExperiences?.length || 0">
             No experiences are added
         </p>
     </div>

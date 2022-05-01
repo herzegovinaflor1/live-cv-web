@@ -69,8 +69,8 @@ export class ExperienceComponent implements OnInit {
     const experience: Experience = this.experiences[index];
     if (this.valuesAreDifferent(experience.position, newPosition)) {
       this.makeUserExperienceCopy();
-      experience.position = newPosition;
 
+      experience.position = newPosition;
       const experienceToUpdate = this.getExperienceFromUpdatedList(index);
       if (experienceToUpdate) {
         experienceToUpdate.position = newPosition;
@@ -84,8 +84,8 @@ export class ExperienceComponent implements OnInit {
     const experience: Experience = this.experiences[index];
     if (this.valuesAreDifferent(experience.company.name, newCompanyName)) {
       this.makeUserExperienceCopy();
-      experience.company.name = newCompanyName;
 
+      experience.company.name = newCompanyName;
       const experienceToUpdate = this.getExperienceFromUpdatedList(index);
       if (experienceToUpdate) {
         experienceToUpdate.company.name = newCompanyName;
@@ -99,8 +99,8 @@ export class ExperienceComponent implements OnInit {
     const experience: Experience = this.experiences[index];
     if (this.valuesAreDifferent(experience.description, newDescription)) {
       this.makeUserExperienceCopy();
-      experience.description = newDescription;
 
+      experience.description = newDescription;
       const experienceToUpdate = this.getExperienceFromUpdatedList(index);
       if (experienceToUpdate) {
         experienceToUpdate.description = newDescription;
@@ -118,6 +118,8 @@ export class ExperienceComponent implements OnInit {
     const experience: Experience = this.experiences[index];
     if (from && this.valuesAreDifferent(experience.from, from)) {
       this.makeUserExperienceCopy();
+
+      experience.from = from;
       const existingExperience = this.getExperienceFromUpdatedList(index);
       if (existingExperience) {
         existingExperience.from = from;
@@ -133,8 +135,11 @@ export class ExperienceComponent implements OnInit {
     const to = target.innerHTML;
 
     const experience: Experience = this.experiences[index];
+    
     if (this.valuesAreDifferent(experience.to, to)) {
       this.makeUserExperienceCopy();
+
+      experience.to = to;
       const existingExperience = this.getExperienceFromUpdatedList(index);
       if (existingExperience) {
         existingExperience.to = to;
@@ -144,12 +149,12 @@ export class ExperienceComponent implements OnInit {
     }
   }
 
-  // 
-
   deleteExistingExperience(index: number) {
     this.makeUserExperienceCopy();
     this.newExperiences.splice(index, 1);
   }
+
+  // end update experience
 
   decline() {
     if (this.copyExperiences.length) {
@@ -205,6 +210,13 @@ export class ExperienceComponent implements OnInit {
 
   isEnabled() {
     return this.authorizationService.isUserLoggedIn();
+  }
+
+  getToDate(toDate: string) {
+    if (toDate) {
+      return toDate;
+    }
+    return "Present"
   }
 
   private getExperienceFromUpdatedList(index: number): Experience | null {
