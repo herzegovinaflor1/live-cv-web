@@ -12,6 +12,7 @@ import { UserService } from '../../service/user-service/user.service';
 export class CvContainerComponent implements OnInit {
 
   response: any;
+  isDataLoaded: boolean = false;
 
   constructor(
     private userService: UserService,
@@ -35,11 +36,13 @@ export class CvContainerComponent implements OnInit {
 
   private setPhoto(userResp: any) {
     this.fileProcessorService.getCurrentUserPhoto()
-    .subscribe((data: any) => {
-      const reader = new FileReader();
-      reader.onload = (e: any) => userResp.photo = e.target.result;
-      reader.readAsDataURL(new Blob([data]));
-    });
+      .subscribe((data: any) => {
+        const reader = new FileReader();
+        reader.onload = (e: any) => userResp.photo = e.target.result;
+        reader.readAsDataURL(new Blob([data]));
+        
+        this.isDataLoaded = true;
+      });
   }
 
 }

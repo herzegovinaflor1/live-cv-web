@@ -1,4 +1,4 @@
-<div id="crt-container" class="crt-container">
+<div id="crt-container" class="crt-container" *ngIf="isDataLoaded">
     <app-avatar [fullName]="response?.fullName || ''" [currentTitle]="response?.currentTitle || ''" [photo]="response?.photo || ''"></app-avatar>
     <div class="crt-container-sm">
         <div id="about" class="crt-paper-layers crt-animate">

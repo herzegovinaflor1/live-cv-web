@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { AuthorizationService } from 'src/app/service/authorization/authorization.service';
+import { FileProcessorService } from 'src/app/service/file-processor/file-processor.service';
 import { UserService } from 'src/app/service/user-service/user.service';
 
 @Component({
@@ -15,7 +16,8 @@ export class ShareProfileComponent implements OnInit {
   constructor(
     private userService: UserService,
     private authorizationService: AuthorizationService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private fileProcessorService: FileProcessorService
   ) { }
 
   ngOnInit(): void {
@@ -24,9 +26,19 @@ export class ShareProfileComponent implements OnInit {
     if (token) {
       this.userService.getUserByToken(token)
         .subscribe(res => {
-          this.response = res;
+          this.setPhoto(res);
+          this.response = res
         });
     }
+  }
+
+  private setPhoto(userResp: any) {
+    this.fileProcessorService.getCurrentUserPhoto()
+      .subscribe((data: any) => {
+        const reader = new FileReader();
+        reader.onload = (e: any) => userResp.photo = e.target.result;
+        reader.readAsDataURL(new Blob([data]));
+      });
   }
 
 }

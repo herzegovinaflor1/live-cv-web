@@ -3,11 +3,11 @@
     <div class="education">
         <div class="education-box" *ngFor="let education of educations; let i = index">
             <div class="education-date" style="display: flex;">
-                <div class="date-block" contenteditable (input)="updateStartDate($event, i)">{{education.from}}</div>
+                <div [class.date-block]="isEnabled()" [attr.contenteditable]="isEnabled()" (input)="updateStartDate($event, i)">{{education.from}}</div>
                 <div>
                     &nbsp;-&nbsp;
                 </div>
-                <div class="date-block" contenteditable (input)="updateEndDate($event, i)">{{education.to}}</div>
+                <div [class.date-block]="isEnabled()" [attr.contenteditable]="isEnabled()" (input)="updateEndDate($event, i)">{{education.to}}</div>
             </div>
             <div style="display: flex; justify-content: space-between;">
                 <h3>

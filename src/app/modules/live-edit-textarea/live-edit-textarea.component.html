@@ -2,7 +2,10 @@
 
     <p *ngIf="!isEnabled(); else elseBlock" [innerHTML]="value"></p>
     <ng-template #elseBlock>
-        <p *ngIf="!isEdit" [innerHTML]="(value ? value : placeholder ? placeholder : '') | linebreaks" class="hover">
+        <p *ngIf="!isEdit" [innerHTML]="(value ? value : placeholder ? placeholder : '') | linebreaks" [ngClass]="{
+            'hover': true,
+            'emptyField': value.length === 0
+        }">
         </p>
         <div *ngIf="isEdit">
             <textarea id="author" class="form-item" type="text" *ngIf="isEdit" [ngModel]="newValue" value="{{newValue}}" (ngModelChange)="onNameChange($event)">

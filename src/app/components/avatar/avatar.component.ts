@@ -3,6 +3,8 @@ import { AvatarService } from 'src/app/service/avatar-service/avatar.service';
 import { FileProcessorService } from 'src/app/service/file-processor/file-processor.service';
 import { SummaryDataChangeRequest } from 'src/app/types/types';
 import { UserService } from '../../service/user-service/user.service';
+declare var require: any;
+const FileSaver = require('file-saver');
 
 @Component({
   selector: 'app-avatar',
@@ -29,7 +31,9 @@ export class AvatarComponent {
       .subscribe((data: any) => {
         const blob = new Blob([data], { type: 'application/pdf' });
         const url = window.URL.createObjectURL(blob);
-        window.open(url);
+        window.open(url, '_blank');
+        const user = this.userService.getCachedUser();
+        FileSaver.saveAs(blob, `LiveCV-${user?.fullName}.pdf`);
       });
   }
 

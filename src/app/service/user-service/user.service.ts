@@ -12,15 +12,19 @@ const EMAIL_REGEX: RegExp = new RegExp("/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/");
 })
 export class UserService {
 
-  private userId: string | null = null;
+  private user: User | null = null;
 
   constructor(
     private httpClient: HttpClient,
     private authorizationService: AuthorizationService
   ) { }
 
-  getCurrentUserId(): any {
-    return this.userId;
+  getCurrentUserId(): string {
+    return this.user?.id || '';
+  }
+
+  getCachedUser(): User | null {
+    return this.user;
   }
 
   getUser(userId: string): Observable<User> {
@@ -28,7 +32,7 @@ export class UserService {
       .get<User>(`${environment.host}/user/${userId}`)
       .pipe(
         tap((data: User) => {
-          this.assignUserId(data.id);
+          this.assignUser(data);
         })
       )
   }
@@ -38,7 +42,7 @@ export class UserService {
       .get<User>(`${environment.host}/user/share-link/${token}`)
       .pipe(
         tap((data: User) => {
-          this.assignUserId(data.id);
+          this.assignUser(data);
         })
       )
   }
@@ -89,8 +93,8 @@ export class UserService {
     return changeRequest.newValue !== changeRequest.oldValue;
   }
 
-  private assignUserId(userId: string) {
-    this.userId = userId;
+  private assignUser(user: User) {
+    this.user = user;
   }
 
 }
