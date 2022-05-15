@@ -38,8 +38,8 @@ export class ExperienceService {
     const add: Experience[] = request.add;
     const update: Experience[] = request.update;
 
-    this.validateDateTo(add);
-    this.validateDateTo(update);
+    // this.validateDateTo(add);
+    // this.validateDateTo(update);
   }
 
   validateDateTo(experiences: Experience[]): boolean {

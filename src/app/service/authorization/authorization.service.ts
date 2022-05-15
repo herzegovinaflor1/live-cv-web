@@ -27,7 +27,7 @@ export class AuthorizationService {
     return this.httpClient.get(`${environment.host}/token/refresh`, options);
   }
 
-  authenticate(username: any, password: any) {
+  authenticate(username: string, password: string) {
     const body = new URLSearchParams();
     body.set('username', username);
     body.set('password', password);
@@ -50,6 +50,17 @@ export class AuthorizationService {
         this.cookieService.set('access_token', accessToken);
         this.cookieService.set('refresh_token', refreshToken);
         this.router.navigate([`/cv/${userId}`])
+      })
+  }
+
+  register(username: string, password: string) {
+    this.httpClient
+      .post(`${environment.host}/user/register`, {
+        "email": username,
+        "password": password
+      })
+      .subscribe((res: any) => {
+        this.authenticate(username, password);
       })
   }
 

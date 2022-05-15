@@ -32,6 +32,7 @@ export type Experience = {
     company: Company,
     achievements?: string[],
     responsibilities?: string[],
+    order: number
 }
 
 export type Education = {
@@ -41,6 +42,7 @@ export type Education = {
     university: string,
     degree: string,
     specialization: string,
+    order: number
 }
 
 export type SummaryDataChangeRequest = {
@@ -76,6 +78,8 @@ export type User = {
 export type UserField = "SUMMARY" | "PHOTO" | "CURRENT_TITLE" | "LOCATION" | "EMAIL" | "PHONE" | "FULL_NAME";
 
 export type ShareLinkCommand = "GENERATE" | "DELETE";
+
+export type ChangeListOrderCommand = "UP" | "DOWN";
 
 type Company = {
     name: string,

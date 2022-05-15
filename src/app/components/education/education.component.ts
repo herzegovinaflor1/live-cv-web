@@ -2,7 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
 import { AuthorizationService } from 'src/app/service/authorization/authorization.service';
 import { EducationService } from 'src/app/service/education/education.service';
-import { Education, ModificationRequest } from 'src/app/types/types';
+import { ChangeListOrderCommand, Education, Experience, ModificationRequest } from 'src/app/types/types';
 
 @Component({
   selector: 'app-education',
@@ -66,13 +66,13 @@ export class EducationComponent implements OnInit {
 
   // update education
 
-  updateUniversity(newUniversity: string, index: number) {
-    const education: Education = this.educations[index];
+  updateUniversity(newUniversity: string, educationId: string) {
+    const education: Education = this.getEducationById(educationId);
     if (this.valuesAreDifferent(education.university, newUniversity)) {
       this.makeUserEducationsCopy();
       education.university = newUniversity;
 
-      const educationToUpdate = this.getEducationFromUpdatedList(index);
+      const educationToUpdate = this.getEducationFromUpdatedList(educationId);
       if (educationToUpdate) {
         educationToUpdate.university = newUniversity;
       } else {
@@ -81,13 +81,13 @@ export class EducationComponent implements OnInit {
     }
   }
 
-  updateDegree(newDegree: string, index: number) {
-    const education: Education = this.educations[index];
+  updateDegree(newDegree: string, educationId: string) {
+    const education: Education = this.getEducationById(educationId);
     if (this.valuesAreDifferent(education.degree, newDegree)) {
       this.makeUserEducationsCopy();
       education.degree = newDegree;
 
-      const educationToUpdate = this.getEducationFromUpdatedList(index);
+      const educationToUpdate = this.getEducationFromUpdatedList(educationId);
       if (educationToUpdate) {
         educationToUpdate.university = newDegree;
       } else {
@@ -96,13 +96,13 @@ export class EducationComponent implements OnInit {
     }
   }
 
-  updateSpecialization(newSpecialization: string, index: number) {
-    const education: Education = this.educations[index];
+  updateSpecialization(newSpecialization: string, educationId: string) {
+    const education: Education = this.getEducationById(educationId);
     if (this.valuesAreDifferent(education.specialization, newSpecialization)) {
       this.makeUserEducationsCopy();
       education.specialization = newSpecialization;
 
-      const educationToUpdate = this.getEducationFromUpdatedList(index);
+      const educationToUpdate = this.getEducationFromUpdatedList(educationId);
       if (educationToUpdate) {
         educationToUpdate.specialization = newSpecialization;
       } else {
@@ -112,15 +112,15 @@ export class EducationComponent implements OnInit {
   }
 
 
-  updateStartDate(newStartDate: Event, index: number) {
+  updateStartDate(newStartDate: Event, educationId: string) {
     const target = newStartDate.target as HTMLDivElement;
     this.proceddEditableField(target);
     const from = target.innerHTML;
 
-    const experience: Education = this.educations[index];
+    const experience: Education = this.getEducationById(educationId);
     if (from && this.valuesAreDifferent(experience.from, from)) {
       this.makeUserEducationsCopy();
-      const existingExperience = this.getEducationFromUpdatedList(index);
+      const existingExperience = this.getEducationFromUpdatedList(educationId);
       if (existingExperience) {
         existingExperience.from = from;
       } else {
@@ -129,21 +129,49 @@ export class EducationComponent implements OnInit {
     }
   }
 
-  updateEndDate(newEndate: Event, index: number) {
+  updateEndDate(newEndate: Event, educationId: string) {
     const target = newEndate.target as HTMLDivElement;
     this.proceddEditableField(target);
     const to = target.innerHTML;
 
-    const experience: Education = this.educations[index];
+    const experience: Education = this.getEducationById(educationId);
     if (to && this.valuesAreDifferent(experience.to, to)) {
       this.makeUserEducationsCopy();
-      const existingExperience = this.getEducationFromUpdatedList(index);
+      const existingExperience = this.getEducationFromUpdatedList(educationId);
       if (existingExperience) {
         existingExperience.to = to;
       } else {
         this.educationsToUpdate.push(experience);
       }
     }
+  }
+
+  updateOrder(newOrder: ChangeListOrderCommand, index: number) {
+    const education: Education = this.educations[index];
+    this.makeUserEducationsCopy();
+    if (newOrder === 'UP') {
+      const indexOfTopElement = index - 1;
+      const topEducation: Education = this.educations[indexOfTopElement];
+      this.educations[indexOfTopElement] = education;
+      this.educations[index] = topEducation;
+      education.order = indexOfTopElement;
+      topEducation.order = index;
+    } else if (newOrder === 'DOWN') {
+      const indexOfDownlement = index + 1;
+      const topExperience: Education = this.educations[indexOfDownlement];
+      this.educations[indexOfDownlement] = education;
+      this.educations[index] = topExperience;
+      education.order = indexOfDownlement;
+      topExperience.order = index;
+    }
+    this.educations.forEach((val) => {
+      const existingEducation = this.getEducationFromUpdatedList(val.id);
+      if (existingEducation) {
+        existingEducation.order = val.order;
+      } else {
+        this.educationsToUpdate.push(val);
+      }
+    })
   }
 
   deleteExistingExperience(index: number) {
@@ -201,7 +229,8 @@ export class EducationComponent implements OnInit {
       specialization: "",
       id: '',
       from: 'from',
-      to: 'to'
+      to: 'to',
+      order: this.generateOrderForNewlyCreatedExperience()
     };
     this.newEducations.push(newEducation);
   }
@@ -217,8 +246,20 @@ export class EducationComponent implements OnInit {
     return this.authorizationService.isUserLoggedIn();
   }
 
-  private getEducationFromUpdatedList(index: number): Education | null {
-    const existingExperience: Education = this.educations[index];
+  isUpButtonEnabled(index: number): boolean {
+    return index > 0;
+  }
+
+  isDownButtonEnabled(index: number): boolean {
+    return index < this.educations.length - 1;
+  }
+
+  private generateOrderForNewlyCreatedExperience(): number {
+    return (this.educations.length - 1) + this.newEducations.length;
+  }
+
+  private getEducationFromUpdatedList(educationId: string): Education | null {
+    const existingExperience: Education = this.getEducationById(educationId);
     const isAlreadyAdded = this.educationsToUpdate
       .filter((experience: Education) => experience.id === existingExperience.id);
     if (isAlreadyAdded.length) {
@@ -226,6 +267,11 @@ export class EducationComponent implements OnInit {
     }
     return null
   }
+
+  private getEducationById(educationId: string): Education {
+    return this.educations.filter(e => e.id === educationId)[0];
+  }
+
 
   private valuesAreDifferent(currentValue: string, newLevel: string) {
     return currentValue !== newLevel;

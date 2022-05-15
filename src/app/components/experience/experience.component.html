@@ -3,29 +3,33 @@
     <div class="education">
         <div class="education-box" *ngFor="let experience of experiences; let i = index">
             <div class="education-date" style="display: flex;">
-                <div [class.date-block]="isEnabled()" [attr.contenteditable]="isEnabled()" (input)="updateStartDate($event, i) ">
+                <div [class.date-block]="isEnabled()" [attr.contenteditable]="isEnabled()" (input)="updateStartDate($event, experience.id) ">
                     {{experience.from}}</div>
                 <div>
                     &nbsp;-&nbsp;
                 </div>
-                <div [class.date-block]="isEnabled()" [attr.contenteditable]="isEnabled()" (input)="updateEndDate($event, i) ">
+                <div [class.date-block]="isEnabled()" [attr.contenteditable]="isEnabled()" (input)="updateEndDate($event, experience.id) ">
                     {{getToDate(experience.to)}}</div>
             </div>
             <div style="display: flex; justify-content: space-between; ">
                 <h3>
-                    <app-live-edit-input value={{experience.position}} (onSave)="updatePosition($event, i) ">
+                    <app-live-edit-input value={{experience.position}} (onSave)="updatePosition($event, experience.id) ">
                     </app-live-edit-input>
                 </h3>
                 <ng-template [ngIf]="isEnabled() ">
-                    <strong class="progress-title " hover-class="highlight " (click)="removeExistingExperience(i) ">Remove</strong>
+                    <div style="display: flex;">
+                        <strong class="progress-title" hover-class="highlight" (click)="removeExistingExperience(i)">Remove</strong>&nbsp;
+                        <strong *ngIf="isUpButtonEnabled(i)" class="progress-title" hover-class="highlight" (click)="updateOrder('UP', i)">Up</strong>&nbsp;
+                        <strong *ngIf="isDownButtonEnabled(i)" class="progress-title" hover-class="highlight" (click)="updateOrder('DOWN', i)">Down</strong>&nbsp;
+                    </div>
                 </ng-template>
             </div>
             <span class="education-company ">
-                <app-live-edit-input value={{experience.company.name}} (onSave)="updateCompanyName($event, i) ">
+                <app-live-edit-input value={{experience.company.name}} (onSave)="updateCompanyName($event, experience.id) ">
                 </app-live-edit-input>
             </span>
             <p>
-                <app-live-edit-textarea value={{experience.description}} (onSave)="updateDescription($event, i) ">
+                <app-live-edit-textarea value={{experience.description}} (onSave)="updateDescription($event, experience.id) ">
                 </app-live-edit-textarea>
             </p>
         </div>
@@ -55,13 +59,13 @@
         </div>
     </div>
     <ng-template [ngIf]="isEnabled() ">
-        <input class="btn btn-primary btn-sm " type="submit " value="Add Experience " (click)="addNewCompany() " style="display: table;margin-left: auto;margin-right: auto; ">
+        <input class="btn btn-primary btn-sm " type="submit " value="Add Experience " (click)="addNewExperience() " style="display: table;margin-left: auto;margin-right: auto; ">
         <div style="display: inline-flex; ">
-            <div *ngIf="newExperiences.length || experiencesToUpdate.length || experiencesToDelete.length " (click)="decline() " class="form-submit form-item-wrap " (click)="decline() ">
+            <div *ngIf="isCancelAndSaveButtonsEnabled()" (click)="decline() " class="form-submit form-item-wrap " (click)="decline() ">
                 <input class="btn btn-primary btn-sm " type="submit " value="Cancel ">
             </div>
-            <div class="form-submit form-item-wrap ">
-                <input class="btn btn-primary btn-sm " type="submit " value="Save " *ngIf="isSave() " (click)="saveNewCompanies() ">
+            <div *ngIf="isCancelAndSaveButtonsEnabled()" class="form-submit form-item-wrap ">
+                <input class="btn btn-primary btn-sm " type="submit " value="Save " (click)="saveNewExperiences() ">
             </div>
         </div>
     </ng-template>

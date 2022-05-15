@@ -3,27 +3,31 @@
     <div class="education">
         <div class="education-box" *ngFor="let education of educations; let i = index">
             <div class="education-date" style="display: flex;">
-                <div [class.date-block]="isEnabled()" [attr.contenteditable]="isEnabled()" (input)="updateStartDate($event, i)">{{education.from}}</div>
+                <div [class.date-block]="isEnabled()" [attr.contenteditable]="isEnabled()" (input)="updateStartDate($event, education.id)">{{education.from}}</div>
                 <div>
                     &nbsp;-&nbsp;
                 </div>
-                <div [class.date-block]="isEnabled()" [attr.contenteditable]="isEnabled()" (input)="updateEndDate($event, i)">{{education.to}}</div>
+                <div [class.date-block]="isEnabled()" [attr.contenteditable]="isEnabled()" (input)="updateEndDate($event, education.id)">{{education.to}}</div>
             </div>
             <div style="display: flex; justify-content: space-between;">
                 <h3>
-                    <app-live-edit-input value={{education.university}} (onSave)="updateUniversity($event, i)">
+                    <app-live-edit-input value={{education.university}} (onSave)="updateUniversity($event, education.id)">
                     </app-live-edit-input>
                 </h3>
                 <ng-template [ngIf]="isEnabled()">
-                    <strong hover-class="highlight" class="progress-title" (click)="removeExistingExperience(i)">Remove</strong>
+                    <div style="display: flex;">
+                        <strong hover-class="highlight" class="progress-title" (click)="removeExistingExperience(i)">Remove</strong>&nbsp;
+                        <strong *ngIf="isUpButtonEnabled(i)" class="progress-title" hover-class="highlight" (click)="updateOrder('UP', i)">Up</strong>&nbsp;
+                        <strong *ngIf="isDownButtonEnabled(i)" class="progress-title" hover-class="highlight" (click)="updateOrder('DOWN', i)">Down</strong>&nbsp;
+                    </div>
                 </ng-template>
             </div>
             <span class="education-company">
-                <app-live-edit-input value={{education.degree}} (onSave)="updateDegree($event, i)">
+                <app-live-edit-input value={{education.degree}} (onSave)="updateDegree($event, education.id)">
                 </app-live-edit-input>
             </span>
             <p>
-                <app-live-edit-textarea value={{education.specialization}} (onSave)="updateSpecialization($event, i)">
+                <app-live-edit-textarea value={{education.specialization}} (onSave)="updateSpecialization($event, education.id)">
                 </app-live-edit-textarea>
             </p>
         </div>

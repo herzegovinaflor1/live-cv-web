@@ -33,6 +33,8 @@ import { SecurityRestrictedComponent } from './modules/security-restricted/secur
 import { ClipboardModule } from '@angular/cdk/clipboard';
 import { ShareProfileComponent } from './pages/share-profile/share-profile.component';
 import { AuthorizationInterceptor } from './interceptors/http-interceptor';
+import { RegisterComponent } from './pages/register/register.component';
+import { MainComponent } from './pages/main/main.component';
 
 @NgModule({
   declarations: [
@@ -54,7 +56,9 @@ import { AuthorizationInterceptor } from './interceptors/http-interceptor';
     LoginComponent,
     CvContainerComponent,
     SecurityRestrictedComponent,
-    ShareProfileComponent
+    ShareProfileComponent,
+    RegisterComponent,
+    MainComponent
   ],
   imports: [
     BrowserModule,
